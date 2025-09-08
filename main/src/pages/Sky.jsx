@@ -1,10 +1,13 @@
 import ShaderTex from "./templates/shadertex";
-import frag from "../shaders/test/circle.frag?raw";
+import frag from "../shaders/pixelgradient.frag?raw";
+import { useRef } from "react";
 
 export default function Sky() {
+  const parent = useRef();
+
   return (
-    <div className="sky">
-      <ShaderTex frag={frag} />
+    <div ref={parent} className="sky">
+      <ShaderTex frag={frag} parent={parent} />
     </div>
   );
 }

@@ -3,6 +3,9 @@ import { createRoot } from "react-dom/client";
 import "./style.css";
 import Sky from "./pages/Sky";
 
+
+window.global = window;
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Layer z={0}>
