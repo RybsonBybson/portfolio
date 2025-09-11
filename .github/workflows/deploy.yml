@@ -3,8 +3,10 @@ name: Deploy Vite to GitHub Pages
 on:
   push:
     branches:
-      - main  # każdorazowy push do main triggeruje deploy
-
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
