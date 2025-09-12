@@ -17,7 +17,7 @@ export default function ShaderTex({ frag, parent }) {
       fragmentShader: frag,
       uniforms: {
         u_time: { value: 0 },
-        u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+        u_resolution: { value: new THREE.Vector2(parent.current.clientWidth, parent.current.clientHeight) }
       }
     });
 
