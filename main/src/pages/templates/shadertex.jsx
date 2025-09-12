@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
-import { useRef } from 'react';
-import * as THREE from 'three';
+import { useEffect } from "react";
+import { useRef } from "react";
+import * as THREE from "three";
 
 export default function ShaderTex({ frag, parent }) {
   const canvas = useRef();
-  
+
   useEffect(() => {
     const renderer = new THREE.WebGLRenderer({ canvas: canvas.current });
     renderer.setSize(parent.current.clientWidth, parent.current.clientHeight);
-    
+
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
@@ -17,8 +17,13 @@ export default function ShaderTex({ frag, parent }) {
       fragmentShader: frag,
       uniforms: {
         u_time: { value: 0 },
-        u_resolution: { value: new THREE.Vector2(parent.current.clientWidth, parent.current.clientHeight) }
-      }
+        u_resolution: {
+          value: new THREE.Vector2(
+            parent.current.clientWidth,
+            parent.current.clientHeight
+          ),
+        },
+      },
     });
 
     const mesh = new THREE.Mesh(geometry, material);
@@ -33,7 +38,10 @@ export default function ShaderTex({ frag, parent }) {
 
     const onResize = () => {
       renderer.setSize(parent.current.clientWidth, parent.current.clientHeight);
-      material.uniforms.u_resolution.value.set(parent.current.clientWidth, parent.current.clientHeight);
+      material.uniforms.u_resolution.value.set(
+        parent.current.clientWidth,
+        parent.current.clientHeight
+      );
     };
     window.addEventListener("resize", onResize);
 
@@ -43,7 +51,5 @@ export default function ShaderTex({ frag, parent }) {
     };
   }, [frag]);
 
-  return (
-    <canvas ref={canvas}></canvas>
-  );
+  return <canvas ref={canvas}></canvas>;
 }
