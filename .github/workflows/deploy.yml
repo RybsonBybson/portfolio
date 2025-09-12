@@ -29,8 +29,15 @@ jobs:
           cd main
           npm run build
 
-      - name: Deploy
+      - name: Deploy Main Page
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./main/dist
+      
+      - name: Deploy Construction Page
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build-page
+          publish_branch: gh_build
