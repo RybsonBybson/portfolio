@@ -1,82 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Under construction</title>
-    <link rel="shortcut icon" href="construct.png" type="image/x-icon">
-    <style>
-        @font-face {
-            font-family: 'pixel';
-            src: url("pix3l5.otf");
-        }
-
-        html,body,main{
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #222;
-            flex-direction: column;
-            font-family: 'pixel';
-            color: white;
-            font-size: 3vh;
-        }
-
-        h2{
-            text-transform: uppercase;
-            border-bottom: solid 0.4vh white;
-        }
-
-        p{
-            margin: 0;
-            font-size: 2vh;
-        }
-
-        .construction-img{
-            height: 30%;
-            aspect-ratio: 1;
-            image-rendering: pixelated;
-            animation-play-state: paused;
-            background-image: url("inbuilding.png");
-            background-repeat: no-repeat;
-            background-size: cover;
-            animation: anim-ss steps(3) 4s infinite;
-        }
-
-        @keyframes anim-ss{from {background-position: 0% 0;} to{background-position: 100% 0;}}
-
-    </style>
-</head>
-<body>
+    <link rel="shortcut icon" href="img/construct.png" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <main>
-        <div class="construction-img"></div>
-        <h2>Site under construction</h2>
-        <p>Planned to reveal in: <b id="time-to-reveal">0</b> seconds!</p>
+      <div class="construction-img"></div>
+      <h2>Site under construction</h2>
+      <p>
+        Planned to reveal in:
+        <div class="row">
+            <b id="days" class="timing-box">0</b>:
+            <b id="hours" class="timing-box">0</b>:
+            <b id="minutes" class="timing-box">0</b>:
+            <b id="seconds" class="timing-box">0</b>
+        </div>
+      </p>
     </main>
 
-    <script>
-        const updateTimer = () => {
-            const now = Date.now();
-            const secondsLeft = Math.floor((revealDate - now) / 1000);
-            timeToReveal.innerHTML = secondsLeft;
-            
-        }
-        const revealDate = new Date().setFullYear(2025, 8, 1);
-        const timeToReveal = document.querySelector("#time-to-reveal");
-    
-
-
-        
-        updateTimer();
-        const interval = window.setInterval(updateTimer, 1000);
-
-
-
-        
-    </script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
