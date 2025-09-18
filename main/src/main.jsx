@@ -1,15 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./style.css";
-import Sky from "./pages/Sky";
-
+import MainScene from "./pages/MainScene";
 
 window.global = window;
 
-createRoot(document.getElementById("root")).render(
+const root = createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Layer z={0}>
-      <Sky />
+      <MainScene />
     </Layer>
   </StrictMode>
 );

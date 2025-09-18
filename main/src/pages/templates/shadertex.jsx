@@ -2,10 +2,18 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import * as THREE from "three";
 
-export default function ShaderTex({ frag, parent }) {
+export default function ShaderTex({ frag, parent, uniforms = {} }) {
   const canvas = useRef();
 
   useEffect(() => {
+    uniforms.u_time = { value: 0 };
+    uniforms.u_resolution = {
+      value: new THREE.Vector2(
+        parent.current.clientWidth,
+        parent.current.clientHeight
+      ),
+    };
+
     const renderer = new THREE.WebGLRenderer({ canvas: canvas.current });
     renderer.setSize(parent.current.clientWidth, parent.current.clientHeight);
 
@@ -15,15 +23,7 @@ export default function ShaderTex({ frag, parent }) {
     const geometry = new THREE.PlaneGeometry(2, 2);
     const material = new THREE.ShaderMaterial({
       fragmentShader: frag,
-      uniforms: {
-        u_time: { value: 0 },
-        u_resolution: {
-          value: new THREE.Vector2(
-            parent.current.clientWidth,
-            parent.current.clientHeight
-          ),
-        },
-      },
+      uniforms: uniforms,
     });
 
     const mesh = new THREE.Mesh(geometry, material);
