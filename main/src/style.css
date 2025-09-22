@@ -1,18 +1,13 @@
 html,
-body,
-#root,
-.layer {
+body {
   width: 100vw;
   height: 100vh;
   padding: 0;
   margin: 0;
   overflow: hidden;
+  display: flex;
 }
 
-.back {
-  --StartColor: #181425;
-  --EndColor: #2b0c2e;
-  height: 100%;
-  width: 100%;
-  padding: 0;
+canvas {
+  cursor: none;
 }
