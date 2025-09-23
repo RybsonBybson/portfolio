@@ -1,8 +1,14 @@
 import * as THREE from "three";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 
 let lastTime = 0;
 const canvas = document.querySelector("#root");
-const renderer = new THREE.WebGLRenderer({ canvas: canvas });
+export const renderer = new THREE.WebGLRenderer({
+  canvas: canvas,
+  antialias: false,
+});
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 export const fsc = new THREE.Scene();
 export const camera = new THREE.OrthographicCamera(
   0,
@@ -12,6 +18,12 @@ export const camera = new THREE.OrthographicCamera(
   -1000,
   1000
 );
+
+export const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(fsc, camera);
+renderPass.clear = true;
+renderPass.camera.layers.set(1);
+composer.addPass(renderPass);
 
 /**
  * @type {CallableFunction[]}
@@ -30,7 +42,7 @@ const updateUniforms = (time) => {
   fsc.traverse((element) => {
     if (!element.material?.uniforms) return;
 
-    element.material.uniforms.u_time.value = time * 0.001;
+    element.material.uniforms.u_time.value = time / 1000;
     element.material.uniforms.u_resolution.value = new THREE.Vector2(
       window.innerWidth,
       window.innerHeight
@@ -43,7 +55,11 @@ const animate = (time) => {
   const dt = (time - lastTime) * 0.001;
   updateUniforms(time);
   animationsCallbacks.forEach((fn) => fn(time, dt));
+
+  camera.layers.set(0);
   renderer.render(fsc, camera);
+  // camera.layers.set(1);
+  // composer.render();
 
   lastTime = time;
 };

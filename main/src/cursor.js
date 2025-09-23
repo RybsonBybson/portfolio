@@ -1,22 +1,39 @@
-import { loadTex, texToMesh } from "./helpers";
+import { loadTex, SpriteSheetMaterial, texToMesh } from "./helpers";
 import { animationsCallbacks, camera, fsc } from "./setup";
 import * as THREE from "three";
 
+export const CURSOR_EVENTS = {
+  click: "c_click",
+  hover: "c_hover",
+  unhover: "c_unhover",
+};
 const raycaster = new THREE.Raycaster();
 
+/**
+ * @type {number} cmesh.tex
+ */
 export const CURSOR = {
   x: window.innerWidth / 2,
   y: window.innerHeight / 2,
   cmesh: new THREE.Mesh(),
-};
 
-export const spawnCursor = async () => {
-  const cursorTex = await loadTex("public/img/cursor.png");
-  const cmesh = texToMesh(cursorTex, undefined, 2);
-  cmesh.name = "CURSOR";
-  fsc.add(cmesh);
-
-  CURSOR.cmesh = cmesh;
+  spawnCursor: async () => {
+    const cursorsheet = new SpriteSheetMaterial(
+      "public/img/cursorsheet.png",
+      16
+    );
+    cursorsheet.transparent = true;
+    await cursorsheet.load();
+    const cmesh = texToMesh({
+      material: cursorsheet,
+      scale: 2,
+      width: cursorsheet.spriteSize,
+      height: cursorsheet.spriteSize,
+    });
+    cmesh.name = "CURSOR";
+    fsc.add(cmesh);
+    CURSOR.cmesh = cmesh;
+  },
 };
 
 /**
@@ -28,7 +45,30 @@ const updateMousePos = (e) => {
   CURSOR.y = e.clientY;
 };
 
-const checkIntersections = () => {
+let previouslyhovered = [];
+/**
+ *
+ * @param {[]} hovered
+ */
+const checkUnhovered = (hovered) => {
+  const filtered = previouslyhovered.filter((item) => !hovered.includes(item));
+
+  filtered.forEach((element) => {
+    console.log(element.name);
+
+    document.dispatchEvent(
+      new CustomEvent(CURSOR_EVENTS.unhover, { detail: element.object.id })
+    );
+  });
+
+  previouslyhovered = hovered;
+};
+
+/**
+ *
+ * @param {string} event
+ */
+const checkIntersections = (event) => {
   const mouse = new THREE.Vector2(
     (CURSOR.x / window.innerWidth) * 2 - 1,
     -(CURSOR.y / window.innerHeight) * 2 + 1
@@ -41,19 +81,23 @@ const checkIntersections = () => {
   const filtered = intersects.filter(
     (int) => int.object.name !== "CURSOR" && int.object.type !== "Scene"
   );
-  console.log(filtered);
+  checkUnhovered(filtered);
+  if (filtered.length <= 0) return;
 
-  if (filtered.length > 0) {
-    filtered.forEach((element) => {
-      console.log(element.name);
-
-      element?.material?.opacity?.set(0.0);
-    });
-  }
+  filtered.forEach((element) => {
+    document.dispatchEvent(
+      new CustomEvent(event, { detail: element.object.id })
+    );
+  });
 };
 
 window.addEventListener("mousemove", updateMousePos);
-window.addEventListener("click", checkIntersections);
+window.addEventListener("mousemove", () => {
+  checkIntersections(CURSOR_EVENTS.hover);
+});
+window.addEventListener("click", () => {
+  checkIntersections(CURSOR_EVENTS.click);
+});
 
 animationsCallbacks.push((time, dt) => {
   CURSOR.cmesh.position.set(CURSOR.x, window.innerHeight - CURSOR.y, 0);
