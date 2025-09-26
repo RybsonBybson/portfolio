@@ -46,10 +46,11 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .timing-box {
-  padding: 0.6vw 0.4vw;
+  padding: 0.8vw 1vw;
   background-color: #111;
   text-align: center;
   display: flex;
@@ -66,4 +67,11 @@ p {
   to {
     background-position: 100% 0;
   }
+}
+
+.timing-cancel {
+  position: absolute;
+  width: 80%;
+  image-rendering: pixelated;
+  display: none;
 }

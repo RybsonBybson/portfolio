@@ -1,3 +1,19 @@
+const setDate = (daysLeft, hoursLeft, minutesLeft, secondsLeft) => {
+  document.querySelector("#seconds").innerHTML = String(secondsLeft).padStart(
+    2,
+    "0"
+  );
+  document.querySelector("#minutes").innerHTML = String(minutesLeft).padStart(
+    2,
+    "0"
+  );
+  document.querySelector("#hours").innerHTML = String(hoursLeft).padStart(
+    2,
+    "0"
+  );
+  document.querySelector("#days").innerHTML = daysLeft;
+};
+
 const updateTimer = () => {
   const now = Date.now();
   const diff = revealDate - now;
@@ -7,13 +23,33 @@ const updateTimer = () => {
   const hoursLeft = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
   const minutesLeft = Math.floor((totalSeconds % (60 * 60)) / 60);
   const secondsLeft = totalSeconds % 60;
+  setDate(daysLeft, hoursLeft, minutesLeft, secondsLeft);
 
-  document.querySelector("#seconds").innerHTML = String(secondsLeft).padStart(2, "0");
-  document.querySelector("#minutes").innerHTML = String(minutesLeft).padStart(2, "0");
-  document.querySelector("#hours").innerHTML = String(hoursLeft).padStart(2, "0");
-  document.querySelector("#days").innerHTML = daysLeft;
+  const audio = new Audio(`audio/click.mp3`);
+  audio.play();
 };
-const revealDate = new Date(2025, 9, 1);
 
-updateTimer();
-const interval = window.setInterval(updateTimer, 1000);
+const showEgg = () => {
+  document.querySelector(".timing-cancel").style.display = "flex";
+};
+
+const decision = () => {
+  if (!timerPassed()) {
+    updateTimer();
+    return;
+  }
+
+  setDate(0, 0, 0, 0);
+  showEgg();
+  window.clearInterval(interval);
+};
+
+const timerPassed = () => {
+  return revealDate < Date.now();
+};
+
+// =================
+
+const revealDate = new Date(2025, 9, 1);
+decision();
+const interval = window.setInterval(decision, 1000);
