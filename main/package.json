@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-three/drei": "^10.7.4",
     "@react-three/fiber": "^9.3.0",
+    "@tweenjs/tween.js": "^25.0.0",
     "gl-react": "^4.1.0",
     "gl-react-dom": "^5.2.1",
     "p5": "^2.0.4",

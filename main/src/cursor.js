@@ -1,17 +1,20 @@
 import { loadTex, SpriteSheetMaterial, texToMesh } from "./helpers";
 import { animationsCallbacks, camera, fsc } from "./setup";
 import * as THREE from "three";
+import * as TWEEN from "@tweenjs/tween.js";
 
+export const CURSOR_SKINS = {
+  default: 0,
+  pointer: 1,
+};
 export const CURSOR_EVENTS = {
   click: "c_click",
   hover: "c_hover",
   unhover: "c_unhover",
 };
 const raycaster = new THREE.Raycaster();
+let previouslyhovered = [];
 
-/**
- * @type {number} cmesh.tex
- */
 export const CURSOR = {
   x: window.innerWidth / 2,
   y: window.innerHeight / 2,
@@ -34,6 +37,23 @@ export const CURSOR = {
     fsc.add(cmesh);
     CURSOR.cmesh = cmesh;
   },
+
+  changeSkin: (to) => {
+    const from = { frame: CURSOR.cmesh.material.frame };
+    const _to = {
+      frame:
+        to == CURSOR_SKINS.default ? 0 : CURSOR.cmesh.material.maxFrames - 1,
+    };
+    const tween = new TWEEN.Tween(from)
+      .to(_to, 200)
+      .onUpdate(() => {
+        const newFrame = Math.floor(from.frame);
+        CURSOR.cmesh.material.changeToFrame(newFrame);
+      })
+      .start();
+
+    animationsCallbacks.push((time, dt) => tween.update(time));
+  },
 };
 
 /**
@@ -45,7 +65,6 @@ const updateMousePos = (e) => {
   CURSOR.y = e.clientY;
 };
 
-let previouslyhovered = [];
 /**
  *
  * @param {[]} hovered
@@ -54,8 +73,6 @@ const checkUnhovered = (hovered) => {
   const filtered = previouslyhovered.filter((item) => !hovered.includes(item));
 
   filtered.forEach((element) => {
-    console.log(element.name);
-
     document.dispatchEvent(
       new CustomEvent(CURSOR_EVENTS.unhover, { detail: element.object.id })
     );
@@ -100,6 +117,10 @@ window.addEventListener("click", () => {
 });
 
 animationsCallbacks.push((time, dt) => {
-  CURSOR.cmesh.position.set(CURSOR.x, window.innerHeight - CURSOR.y, 0);
+  CURSOR.cmesh.position.set(
+    CURSOR.x - window.innerWidth / 2,
+    window.innerHeight / 2 - CURSOR.y,
+    0
+  );
   CURSOR.cmesh.rotateZ(dt);
 });

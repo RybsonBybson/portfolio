@@ -10,6 +10,9 @@ CURSOR.spawnCursor();
 
 const mainScene = new THREE.Scene();
 mainScene.name = "MAIN SCENE";
+mainScene.position.sub(
+  new THREE.Vector3(window.innerWidth / 2, window.innerHeight / 2)
+);
 
 const geometry = new THREE.PlaneGeometry(
   window.innerWidth * 2,

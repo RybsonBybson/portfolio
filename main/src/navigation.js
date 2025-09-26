@@ -1,9 +1,12 @@
 import * as THREE from "three";
-import { fsc } from "./setup";
+import { animationsCallbacks, fsc } from "./setup";
 import { loadTex, texToMesh } from "./helpers";
-import { CURSOR, CURSOR_EVENTS } from "./cursor";
+import { CURSOR, CURSOR_EVENTS, CURSOR_SKINS } from "./cursor";
 
 const nav = new THREE.Group();
+nav.position.sub(
+  new THREE.Vector3(window.innerWidth / 2, window.innerHeight / 2)
+);
 nav.name = "NAVIGATION";
 fsc.add(nav);
 
@@ -41,7 +44,7 @@ const createNavBtn = async (
         Math.sin(direction) * moveStrength
       )
     );
-    CURSOR.cmesh.material.changeToFrame(CURSOR.cmesh.material.maxFrames - 1);
+    CURSOR.changeSkin(CURSOR_SKINS.pointer);
   });
 
   document.addEventListener(CURSOR_EVENTS.unhover, (id) => {
@@ -54,7 +57,7 @@ const createNavBtn = async (
         Math.sin(direction) * moveStrength
       )
     );
-    CURSOR.cmesh.material.changeToFrame(0);
+    CURSOR.changeSkin(CURSOR_SKINS.default);
   });
 
   nav.add(btn);
@@ -77,16 +80,16 @@ createNavBtn(
 //   new THREE.Vector3(window.innerWidth / 2, thickness / 2)
 // );
 //left
-createNavBtn(
-  thickness,
-  window.innerHeight,
-  Math.PI / 2,
-  new THREE.Vector3(thickness / 2, window.innerHeight / 2)
-);
+// createNavBtn(
+//   thickness,
+//   window.innerHeight,
+//   Math.PI / 2,
+//   new THREE.Vector3(thickness / 2, window.innerHeight / 2)
+// );
 //right
-createNavBtn(
-  thickness,
-  window.innerHeight,
-  -Math.PI / 2,
-  new THREE.Vector3(window.innerWidth - thickness / 2, window.innerHeight / 2)
-);
+// createNavBtn(
+//   thickness,
+//   window.innerHeight,
+//   -Math.PI / 2,
+//   new THREE.Vector3(window.innerWidth - thickness / 2, window.innerHeight / 2)
+// );

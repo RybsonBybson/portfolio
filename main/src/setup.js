@@ -1,3 +1,4 @@
+import * as TWEEN from "@tweenjs/tween.js";
 import * as THREE from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
@@ -11,12 +12,12 @@ export const renderer = new THREE.WebGLRenderer({
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 export const fsc = new THREE.Scene();
 export const camera = new THREE.OrthographicCamera(
-  0,
-  window.innerWidth,
-  window.innerHeight,
-  0,
-  -1000,
-  1000
+  -window.innerWidth / 2,
+  window.innerWidth / 2,
+  window.innerHeight / 2,
+  -window.innerHeight / 2,
+  1,
+  10
 );
 
 export const composer = new EffectComposer(renderer);
@@ -30,12 +31,18 @@ composer.addPass(renderPass);
  */
 export const animationsCallbacks = [];
 
+const updateOrthoCamera = () => {
+  camera.top = window.innerHeight / 2;
+  camera.right = window.innerWidth / 2;
+  camera.left = -window.innerWidth / 2;
+  camera.bottom = -window.innerHeight / 2;
+
+  camera.updateProjectionMatrix();
+};
+
 const resize = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.right = window.innerWidth;
-  camera.top = window.innerHeight;
-  camera.bottom = 0;
-  camera.left = 0;
+  updateOrthoCamera();
 };
 
 const updateUniforms = (time) => {
@@ -55,7 +62,6 @@ const animate = (time) => {
   const dt = (time - lastTime) * 0.001;
   updateUniforms(time);
   animationsCallbacks.forEach((fn) => fn(time, dt));
-
   camera.layers.set(0);
   renderer.render(fsc, camera);
   // camera.layers.set(1);
