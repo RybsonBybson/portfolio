@@ -39,7 +39,10 @@ mainScene.add(bg);
 const sign = new THREE.Group();
 sign.position.z = -1;
 
-const scale = 8;
+const resolution = { w: window.innerWidth, h: window.innerHeight };
+const aspect = resolution.w / resolution.h;
+const _scale = 12;
+const scale = _scale / aspect;
 
 const texbase = await loadTex("public/img/slup.png");
 const base = texToMesh({
