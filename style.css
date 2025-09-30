@@ -19,6 +19,7 @@ main {
   color: white;
   font-size: 1.4vw;
   text-align: center;
+  overflow: hidden;
 }
 
 h2 {
@@ -74,4 +75,37 @@ p {
   width: 80%;
   image-rendering: pixelated;
   display: none;
+}
+
+.oops {
+  position: absolute;
+  right: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.oops-image {
+  position: relative;
+  left: 40vw;
+  width: 30vw;
+  aspect-ratio: 25 / 21;
+  rotate: -57deg;
+  image-rendering: pixelated;
+  background-image: url("img/oops.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  animation: anim-ss steps(2, jump-none) 2s infinite;
+}
+
+.cloud {
+  padding: 2vw;
+  outline: solid 0.4vw black;
+  background-color: #111;
+}
+
+.oops-text {
+  position: relative;
+  bottom: 15vw;
+  right: 10vw;
 }
