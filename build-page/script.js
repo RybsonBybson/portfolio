@@ -25,12 +25,16 @@ const updateTimer = () => {
   const secondsLeft = totalSeconds % 60;
   setDate(daysLeft, hoursLeft, minutesLeft, secondsLeft);
 
-  const audio = new Audio(`audio/click.mp3`);
-  audio.play();
+  // const audio = new Audio(`audio/click.mp3`);
+  // audio.play();
 };
 
 const showEgg = () => {
   document.querySelector(".timing-cancel").style.display = "flex";
+};
+
+const show2Egg = () => {
+  document.querySelector(".oops").style.display = "flex";
 };
 
 const decision = () => {
@@ -38,10 +42,12 @@ const decision = () => {
     updateTimer();
     return;
   }
-
+  const timeSinceShouldBeReleased = Date.now() - revealDate;
+  const sec = timeSinceShouldBeReleased / 1000;
   setDate(0, 0, 0, 0);
   showEgg();
-  window.clearInterval(interval);
+
+  if (sec > egg2) show2Egg();
 };
 
 const timerPassed = () => {
@@ -50,6 +56,7 @@ const timerPassed = () => {
 
 // =================
 
+const egg2 = 60 * 60 * 48; // 48 hours = 2 days
 const revealDate = new Date(2025, 9, 1);
 decision();
 const interval = window.setInterval(decision, 1000);
