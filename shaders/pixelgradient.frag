@@ -3,7 +3,7 @@ precision mediump float;
 uniform float u_time;
 uniform vec2 u_resolution;
 
-float speed = .6;
+float speed = .4;
 uniform vec3 u_colorA;
 uniform vec3 u_colorB;
 float pixelSize = 8.0;
