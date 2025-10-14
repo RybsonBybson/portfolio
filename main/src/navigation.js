@@ -1,7 +1,18 @@
 import * as THREE from "three";
-import { animationsCallbacks, fsc } from "./setup";
+import { animationsCallbacks, camera, fsc } from "./setup";
 import { loadTex, texToMesh } from "./helpers";
 import { CURSOR, CURSOR_EVENTS, CURSOR_SKINS } from "./cursor";
+import * as TWEEN from "@tweenjs/tween.js";
+
+// PARAMETERS
+
+const thickness = 70;
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
 
 const nav = new THREE.Group();
 nav.position.sub(
@@ -60,25 +71,51 @@ const createNavBtn = async (
     CURSOR.changeSkin(CURSOR_SKINS.default);
   });
 
+  document.addEventListener(CURSOR_EVENTS.click, (id) => {
+    if (id.detail !== btn.id || btn.hover) return;
+    clickaction();
+  });
+
   nav.add(btn);
 };
 
-const thickness = 70;
+/**
+ *
+ * @param {{x: number, y: number, z: number}} newPos
+ */
+const cameraMove = (
+  newPos,
+  duration = 1000,
+  easing = TWEEN.Easing.Quadratic.InOut
+) => {
+  const tween = new TWEEN.Tween(camera.position)
+    .to(newPos)
+    .duration(duration)
+    .easing(easing)
+    .start();
+
+  animationsCallbacks.push((time, dt) => tween.update(time));
+};
+
+// -=-=-=-=-=-=-=-=-=-
 
 //top
 createNavBtn(
   window.innerWidth - thickness * 2,
   thickness,
   0,
-  new THREE.Vector3(window.innerWidth / 2, window.innerHeight - thickness / 2)
+  new THREE.Vector3(window.innerWidth / 2, window.innerHeight - thickness / 2),
+  () => cameraMove({ y: window.innerHeight })
 );
-//bottom
-// createNavBtn(
-//   window.innerWidth - thickness * 2,
-//   thickness,
-//   Math.PI,
-//   new THREE.Vector3(window.innerWidth / 2, thickness / 2)
-// );
+// bottom
+createNavBtn(
+  window.innerWidth - thickness * 2,
+  thickness,
+  Math.PI,
+  new THREE.Vector3(window.innerWidth / 2, window.innerHeight + thickness / 2),
+  () => cameraMove({ y: 0 })
+);
+
 //left
 // createNavBtn(
 //   thickness,

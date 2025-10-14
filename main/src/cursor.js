@@ -7,6 +7,7 @@ export const CURSOR_SKINS = {
   default: 0,
   pointer: 1,
 };
+
 export const CURSOR_EVENTS = {
   click: "c_click",
   hover: "c_hover",
@@ -118,8 +119,8 @@ window.addEventListener("click", () => {
 
 animationsCallbacks.push((time, dt) => {
   CURSOR.cmesh.position.set(
-    CURSOR.x - window.innerWidth / 2,
-    window.innerHeight / 2 - CURSOR.y,
+    CURSOR.x - window.innerWidth / 2 - camera.position.x,
+    window.innerHeight / 2 + camera.position.y - CURSOR.y,
     0
   );
   CURSOR.cmesh.rotateZ(dt);

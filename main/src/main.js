@@ -6,7 +6,17 @@ import { hexToRgbVec3, loadTex, texToMesh } from "./helpers";
 import { CURSOR, CURSOR_EVENTS } from "./cursor";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 
+// PARAMETERS
+
+const scale = 8;
+
 CURSOR.spawnCursor();
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-  MAIN SCENE -=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
 
 const mainScene = new THREE.Scene();
 mainScene.name = "MAIN SCENE";
@@ -14,10 +24,7 @@ mainScene.position.sub(
   new THREE.Vector3(window.innerWidth / 2, window.innerHeight / 2)
 );
 
-const geometry = new THREE.PlaneGeometry(
-  window.innerWidth * 2,
-  window.innerHeight * 2
-);
+const geometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
 const material = new THREE.ShaderMaterial({
   fragmentShader: pixelgradient,
   uniforms: {
@@ -31,15 +38,13 @@ const material = new THREE.ShaderMaterial({
 });
 
 const bg = new THREE.Mesh(geometry, material);
-bg.position.z = -5;
+bg.position.set(window.innerWidth / 2, window.innerHeight / 2, -5);
 
 fsc.add(mainScene);
 mainScene.add(bg);
 
 const sign = new THREE.Group();
 sign.position.z = -1;
-
-const scale = 8;
 
 const texbase = await loadTex("public/img/slup.png");
 const base = texToMesh({
@@ -73,40 +78,22 @@ mainScene.add(sign);
 // -=-=-=-=-=-=-=-=-=-=-=-=-
 // -=-=-=-=-=-=-=-=-=-=-=-=-
 // -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
 
-const groupLayer = 1;
-// fullpaper.layers.set(groupLayer);
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=- SKY SCENE -=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-
 
-const shaderPass = new ShaderPass({
-  uniforms: {
-    u_time: { value: 0 },
-    u_resolution: {
-      value: new THREE.Vector2(window.innerWidth, window.innerHeight),
-    },
-  },
-  fragmentShader: waving,
-});
+const skyScene = new THREE.Scene();
+skyScene.name = "SKY SCENE";
+skyScene.position.sub(
+  new THREE.Vector3(window.innerWidth / 2, -window.innerHeight / 2)
+);
 
-shaderPass.material.transparent = true;
-composer.addPass(shaderPass);
+const skybg = new THREE.Mesh(geometry, material);
+skybg.position.set(window.innerWidth / 2, window.innerHeight / 2, -5);
 
-animationsCallbacks.push((time, dt) => {
-  shaderPass.uniforms.u_time.value = time / 1000;
-  shaderPass.uniforms.u_resolution.value = new THREE.Vector2(
-    window.innerWidth,
-    window.innerHeight
-  );
-});
-
-// fullpaper.traverse((obj) => {
-//   obj.layers.set(1);
-// });
-
-// TEST
-
-// document.addEventListener(CURSOR_EVENTS.hover, (id) => {
-//   if (id.detail !== av.id || av.hover) return;
-//   av.hover = true;
-//   av.scale.add(new THREE.Vector3(0.1, 0.1));
-//   CURSOR.cmesh.material.changeToFrame(CURSOR.cmesh.material.maxFrames - 1);
-// });
+fsc.add(skyScene);
+skyScene.add(skybg);
