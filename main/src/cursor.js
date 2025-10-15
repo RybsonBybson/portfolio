@@ -1,4 +1,4 @@
-import { loadTex, SpriteSheetMaterial, texToMesh } from "./helpers";
+import { loadTex, Settings, SpriteSheetMaterial, texToMesh } from "./helpers";
 import { animationsCallbacks, camera, fsc } from "./setup";
 import * as THREE from "three";
 import * as TWEEN from "@tweenjs/tween.js";
@@ -30,7 +30,7 @@ export const CURSOR = {
     await cursorsheet.load();
     const cmesh = texToMesh({
       material: cursorsheet,
-      scale: 2,
+      scale: Settings.cursor_scale,
       width: cursorsheet.spriteSize,
       height: cursorsheet.spriteSize,
     });

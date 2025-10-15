@@ -2,13 +2,11 @@ import * as THREE from "three";
 import { animationsCallbacks, camera, composer, fsc, renderer } from "./setup";
 import pixelgradient from "/shaders/pixelgradient.frag?url&raw";
 import waving from "/shaders/waving.frag?url&raw";
-import { hexToRgbVec3, loadTex, texToMesh } from "./helpers";
+import { hexToRgbVec3, loadTex, Settings, texToMesh } from "./helpers";
 import { CURSOR, CURSOR_EVENTS } from "./cursor";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 
 // PARAMETERS
-
-const scale = 8;
 
 CURSOR.spawnCursor();
 
@@ -49,8 +47,11 @@ sign.position.z = -1;
 const texbase = await loadTex("public/img/slup.png");
 const base = texToMesh({
   tex: texbase,
-  pos: new THREE.Vector3(window.innerWidth / 2, (texbase.height * scale) / 2),
-  scale: scale,
+  pos: new THREE.Vector3(
+    window.innerWidth / 2,
+    (texbase.height * Settings.sign_scale) / 2
+  ),
+  scale: Settings.sign_scale,
 });
 
 sign.add(base);
@@ -59,14 +60,14 @@ const fullpaper = new THREE.Group();
 const texpaper = await loadTex("public/img/paper.png");
 const paper = texToMesh({
   tex: texpaper,
-  pos: new THREE.Vector3(0, 20 * scale),
-  scale: scale,
+  pos: new THREE.Vector3(0, 20 * Settings.sign_scale),
+  scale: Settings.sign_scale,
 });
 const texav = await loadTex("public/img/RybsonBybson pixel.png");
 const av = texToMesh({
   tex: texav,
-  pos: new THREE.Vector3(0, -5 * scale),
-  scale: scale / (texav.width / 16),
+  pos: new THREE.Vector3(0, -5 * Settings.sign_scale),
+  scale: Settings.sign_scale / (texav.width / 16),
 });
 
 fullpaper.add(paper);

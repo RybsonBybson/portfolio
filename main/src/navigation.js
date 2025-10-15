@@ -1,12 +1,10 @@
 import * as THREE from "three";
 import { animationsCallbacks, camera, fsc } from "./setup";
-import { loadTex, texToMesh } from "./helpers";
+import { loadTex, Settings, texToMesh } from "./helpers";
 import { CURSOR, CURSOR_EVENTS, CURSOR_SKINS } from "./cursor";
 import * as TWEEN from "@tweenjs/tween.js";
 
 // PARAMETERS
-
-const thickness = 70;
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-
 // -=-=-=-=-=-=-=-=-=-=-=-=-
@@ -29,7 +27,7 @@ const createNavBtn = async (
   clickaction = () => {}
 ) => {
   const tex = await loadTex("public/img/arrow.png");
-  const arrow = texToMesh({ tex: tex, scale: 4 });
+  const arrow = texToMesh({ tex: tex, scale: Settings.navigation_arrow_scale });
   arrow.material.opacity = 0.1;
   arrow.rotateZ(direction);
 
@@ -85,7 +83,7 @@ const createNavBtn = async (
  */
 const cameraMove = (
   newPos,
-  duration = 1000,
+  duration = Settings.navigation_camera_move_duration,
   easing = TWEEN.Easing.Quadratic.InOut
 ) => {
   const tween = new TWEEN.Tween(camera.position)
@@ -101,32 +99,38 @@ const cameraMove = (
 
 //top
 createNavBtn(
-  window.innerWidth - thickness * 2,
-  thickness,
+  window.innerWidth - Settings.navigation_thickness * 2,
+  Settings.navigation_thickness,
   0,
-  new THREE.Vector3(window.innerWidth / 2, window.innerHeight - thickness / 2),
+  new THREE.Vector3(
+    window.innerWidth / 2,
+    window.innerHeight - Settings.navigation_thickness / 2
+  ),
   () => cameraMove({ y: window.innerHeight })
 );
 // bottom
 createNavBtn(
-  window.innerWidth - thickness * 2,
-  thickness,
+  window.innerWidth - Settings.navigation_thickness * 2,
+  Settings.navigation_thickness,
   Math.PI,
-  new THREE.Vector3(window.innerWidth / 2, window.innerHeight + thickness / 2),
+  new THREE.Vector3(
+    window.innerWidth / 2,
+    window.innerHeight + Settings.navigation_thickness / 2
+  ),
   () => cameraMove({ y: 0 })
 );
 
 //left
 // createNavBtn(
-//   thickness,
+//   Settings.navigation_thickness,
 //   window.innerHeight,
 //   Math.PI / 2,
-//   new THREE.Vector3(thickness / 2, window.innerHeight / 2)
+//   new THREE.Vector3(Settings.navigation_thickness / 2, window.innerHeight / 2)
 // );
 //right
 // createNavBtn(
-//   thickness,
+//   Settings.navigation_thickness,
 //   window.innerHeight,
 //   -Math.PI / 2,
-//   new THREE.Vector3(window.innerWidth - thickness / 2, window.innerHeight / 2)
+//   new THREE.Vector3(window.innerWidth - Settings.navigation_thickness / 2, window.innerHeight / 2)
 // );

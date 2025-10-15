@@ -90,3 +90,17 @@ export class SpriteSheetMaterial extends THREE.MeshBasicMaterial {
     this.map = this.tex;
   }
 }
+
+const responsive_height_scale = window.innerHeight / 2560; // monitor, the app was tested on, was 2560px height
+const responsive_width_scale = window.innerWidth / 1440; // monitor, the app was tested on, was 1440px width
+export const Settings = {
+  responsive_height_scale,
+  responsive_width_scale,
+  sign_scale: 16 * responsive_height_scale,
+
+  navigation_thickness: 180 * responsive_height_scale,
+  navigation_camera_move_duration: 1000,
+  navigation_arrow_scale: 14 * responsive_height_scale,
+
+  cursor_scale: 6 * responsive_height_scale,
+};
